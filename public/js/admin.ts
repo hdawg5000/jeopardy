@@ -1,33 +1,42 @@
 const adminSocket: SocketIOClient.Socket = io()
 
 const controls: HTMLFormElement = <HTMLFormElement>document.querySelector('#controls')
+const playerList: HTMLUListElement = <HTMLUListElement>document.querySelector('#player-list')
+const playerNameBuzzed: HTMLParagraphElement = <HTMLParagraphElement>document.getElementById('player-name-buzzed')
+
+
 controls.addEventListener('submit', (e) => {
     e.preventDefault()
 
     adminSocket.emit('resetBuzzer')
+    playerNameBuzzed.innerHTML = ''
 })
 
 adminSocket.on('connect', () => {
     adminSocket.emit('adminConnected')
 })
 
-adminSocket.on('userLeft', (name: string) => {
-    console.log(name, 'left')
+adminSocket.on('userLeft', (players: { name: string, id: string }[]) => {
+    while (playerList.firstChild) playerList.firstChild.remove()
+    players.forEach(player => {
+        let li = document.createElement('li')
+        li.textContent = `${player.name} (${player.id})\n`
+        playerList.appendChild(li)
+    })
 })
 
 adminSocket.on('buzzerPressed', (name: string) => {
-    const p: HTMLParagraphElement = <HTMLParagraphElement>document.querySelector('#player-name-buzzed')
-    p.setAttribute('textContent', `${name} buzzed!`)
+    console.log('buzzer pressed', name)
+    playerNameBuzzed.innerHTML = `${name} buzzed!`
 })
 
 adminSocket.on('userConnected', (players: { name: string, id: string }[]) => {
-    const list: HTMLUListElement = <HTMLUListElement>document.querySelector('#player-list')
-    while (list.firstChild) list.firstChild.remove()
+    while (playerList.firstChild) playerList.firstChild.remove()
     console.log(players)
     players.forEach(player => {
         let li = document.createElement('li')
         li.textContent = `${player.name} (${player.id})\n`
-        list.appendChild(li)
+        playerList.appendChild(li)
     })
 })
 

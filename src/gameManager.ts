@@ -7,6 +7,18 @@ export class GameManager {
 
     public removePlayer(name: string): void {
         this.players.delete(name)
+        console.log('deleted', name)
+        console.log('d', this.players.keys())
+    }
+
+    public getPlayerNameById(id: string): string {
+        let name = ''
+        this.players.forEach((value: string, key: string) => {
+            if (value === id) {
+                name = key
+            }
+        })
+        return name
     }
 
     public getAllPlayers(): { name: string, id: string }[] {

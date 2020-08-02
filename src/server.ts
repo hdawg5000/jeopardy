@@ -14,7 +14,6 @@ const io = socketio(server, {
     pingTimeout: 60000, // default - 60000
 })
 
-let players: Map<string, string> = new Map()
 const publicDirectoryPath = path.join(__dirname, '../public')
 let adminSocketId = ''
 
@@ -35,7 +34,7 @@ app.get('/admin', (req, res) => {
 })
 
 io.on('connection', (socket: SocketIO.Socket) => {
-    console.log('New connection', socket.id, players.keys())
+    console.log('New connection', socket.id)
 
     socket.on('submittedName', (name) => {
         console.log('name', name)
@@ -50,7 +49,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
     })
 
     socket.on('buzzerPressed', () => {
-        const name: string = players.get(socket.id) || ''
+        const name: string = manager.getPlayerNameById(socket.id) || ''
         buzzed(name)
     })
 
@@ -61,10 +60,11 @@ io.on('connection', (socket: SocketIO.Socket) => {
     socket.on('disconnect', (reason) => {
         console.log('reason', reason)
         if (reason === 'transport close') {
-            const name = players.get(socket.id)
+            const name = manager.getPlayerNameById(socket.id)
+            console.log(name)
             if (name) {
-                io.to(adminSocketId).emit('userLeft', name)
                 manager.removePlayer(name)
+                io.to(adminSocketId).emit('userLeft', manager.getAllPlayers())
                 console.log(name, 'left')
             }
         }
@@ -91,6 +91,7 @@ server.listen(port, () => console.log(`listening on port ${port}`))
 function buzzed(name: string) {
     console.log('emitting', name)
     io.emit('buzzerPressed', name)
+    io.to(adminSocketId).emit('buzzerPressed', name)
 }
 
 function resetBuzzer() {

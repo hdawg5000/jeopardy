@@ -11,6 +11,17 @@ class GameManager {
     }
     removePlayer(name) {
         this.players.delete(name);
+        console.log('deleted', name);
+        console.log('d', this.players.keys());
+    }
+    getPlayerNameById(id) {
+        let name = '';
+        this.players.forEach((value, key) => {
+            if (value === id) {
+                name = key;
+            }
+        });
+        return name;
     }
     getAllPlayers() {
         let p = new Array();

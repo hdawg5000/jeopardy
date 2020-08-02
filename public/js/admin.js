@@ -1,29 +1,37 @@
 "use strict";
 const adminSocket = io();
 const controls = document.querySelector('#controls');
+const playerList = document.querySelector('#player-list');
+const playerNameBuzzed = document.getElementById('player-name-buzzed');
 controls.addEventListener('submit', (e) => {
     e.preventDefault();
     adminSocket.emit('resetBuzzer');
+    playerNameBuzzed.innerHTML = '';
 });
 adminSocket.on('connect', () => {
     adminSocket.emit('adminConnected');
 });
-adminSocket.on('userLeft', (name) => {
-    console.log(name, 'left');
+adminSocket.on('userLeft', (players) => {
+    while (playerList.firstChild)
+        playerList.firstChild.remove();
+    players.forEach(player => {
+        let li = document.createElement('li');
+        li.textContent = `${player.name} (${player.id})\n`;
+        playerList.appendChild(li);
+    });
 });
 adminSocket.on('buzzerPressed', (name) => {
-    const p = document.querySelector('#player-name-buzzed');
-    p.setAttribute('textContent', `${name} buzzed!`);
+    console.log('buzzer pressed', name);
+    playerNameBuzzed.innerHTML = `${name} buzzed!`;
 });
 adminSocket.on('userConnected', (players) => {
-    const list = document.querySelector('#player-list');
-    while (list.firstChild)
-        list.firstChild.remove();
+    while (playerList.firstChild)
+        playerList.firstChild.remove();
     console.log(players);
     players.forEach(player => {
         let li = document.createElement('li');
         li.textContent = `${player.name} (${player.id})\n`;
-        list.appendChild(li);
+        playerList.appendChild(li);
     });
 });
 adminSocket.on('connectedPlayers', (players) => {
