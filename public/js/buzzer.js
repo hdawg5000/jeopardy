@@ -1,31 +1,30 @@
-const socket = io()
-const Constants = '../constants/constants'
-
-let buzzerDisabled = false
-let playerName = ''
-document.querySelector('#buzzerForm').style.display = 'none'
-
-document.querySelector('#name-form')
+"use strict";
+const buzzerSocket = io();
+const CONSTANTS = '../constants/constants';
+let buzzerDisabled = false;
+let playerName = '';
+const buzzerButton = document.querySelector('#buzzer-btn');
+const buzzerForm = document.querySelector('#buzzerForm');
+buzzerForm.style.display = 'none';
+const nameForm = document.querySelector('#name-form');
+nameForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const playerNameInput = document.querySelector('#name-input');
+    const playerName = playerNameInput.value;
+    console.log('player', playerName);
+    buzzerSocket.emit('submittedName', playerName);
+    nameForm.style.display = 'none';
+    buzzerForm.style.display = 'block';
+});
+buzzerForm
     .addEventListener('submit', (e) => {
-        e.preventDefault()
-        playerName = document.querySelector('#name-input').value
-        console.log('player', playerName)
-        socket.emit('submittedName', playerName)
-        document.querySelector('#name-form').style.display = 'none'
-        document.querySelector('#buzzerForm').style.display = 'block'
-    })
-
-document.querySelector('#buzzerForm')
-    .addEventListener('submit', (e) => {
-        e.preventDefault()
-        socket.emit('buzzerPressed', name)
-    })
-
-socket.on('buzzerPressed', (name) => {
-    console.log(`${name} buzzed!`)
-    document.querySelector('#buzzer-btn').setAttribute('disabled', '')
-})
-
-socket.on('resetBuzzer', () => {
-    document.querySelector('#buzzer-btn').removeAttribute('disabled')
-})
+    e.preventDefault();
+    buzzerSocket.emit('buzzerPressed', name);
+});
+buzzerSocket.on('buzzerPressed', (name) => {
+    console.log(`${name} buzzed!`);
+    buzzerButton.setAttribute('disabled', '');
+});
+buzzerSocket.on('resetBuzzer', () => {
+    buzzerButton.removeAttribute('disabled');
+});
