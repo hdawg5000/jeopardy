@@ -1,6 +1,5 @@
 "use strict";
-// export {}
-let adminSocket = io();
+const adminSocket = io();
 const controls = document.querySelector('#controls');
 controls.addEventListener('submit', (e) => {
     e.preventDefault();

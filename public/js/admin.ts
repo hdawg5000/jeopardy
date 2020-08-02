@@ -1,5 +1,4 @@
-// export {}
-let adminSocket: SocketIOClient.Socket = io()
+const adminSocket: SocketIOClient.Socket = io()
 
 const controls: HTMLFormElement = <HTMLFormElement>document.querySelector('#controls')
 controls.addEventListener('submit', (e) => {
