@@ -13,7 +13,6 @@ nameForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const playerNameInput = document.querySelector('#name-input');
     const playerName = playerNameInput.value;
-    console.log('player', playerName);
     buzzerSocket.emit('submittedName', playerName);
     nameForm.style.display = 'none';
     buzzerForm.style.display = 'block';

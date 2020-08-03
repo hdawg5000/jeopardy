@@ -11,12 +11,9 @@ class GameManager {
     }
     addPlayer(name, id) {
         this.players.set(name, id);
-        console.log('manager', this.players.entries());
     }
     removePlayer(name) {
         this.players.delete(name);
-        console.log('deleted', name);
-        console.log('d', this.players.keys());
     }
     getPlayerNameById(id) {
         let name = '';

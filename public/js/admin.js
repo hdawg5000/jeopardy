@@ -19,7 +19,6 @@ resetBuzzerBtn.addEventListener('click', (e) => {
 });
 timerStartBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    console.log('time clicked');
     adminSocket.emit('startTimer');
     playerNameBuzzed.innerHTML = '';
 });
@@ -46,13 +45,11 @@ adminSocket.on('userLeft', (players) => {
     });
 });
 adminSocket.on('buzzerPressed', (name) => {
-    console.log('buzzer pressed', name);
     playerNameBuzzed.innerHTML = `${name} buzzed!`;
 });
 adminSocket.on('userConnected', (players) => {
     while (playerList.firstChild)
         playerList.firstChild.remove();
-    console.log(players);
     players.forEach(player => {
         let li = document.createElement('li');
         li.textContent = `${player.name} (${player.id})\n`;
@@ -60,7 +57,6 @@ adminSocket.on('userConnected', (players) => {
     });
 });
 adminSocket.on('connectedPlayers', (players) => {
-    console.log('connected', players);
     players.map((player) => {
         let li = document.createElement('li');
         li.textContent = `${player.name} (${player.id})\n`;
