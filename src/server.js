@@ -45,6 +45,23 @@ io.on('connection', (socket) => {
     socket.on('resetBuzzer', () => {
         resetBuzzer();
     });
+    socket.on('startTimer', () => {
+        console.log('start timer server');
+        manager.startTimer();
+        manager.timerObs
+            .subscribe((time) => {
+            console.log(time);
+            io.emit('timerUpdate', time);
+        });
+    });
+    socket.on('pauseTimer', () => {
+        console.log('reset server');
+        manager.pauseTimer();
+    });
+    socket.on('resetTimer', () => {
+        console.log('reset server');
+        manager.resetTimer();
+    });
     socket.on('disconnect', (reason) => {
         console.log('reason', reason);
         if (reason === 'transport close') {
@@ -80,4 +97,9 @@ function buzzed(name) {
 function resetBuzzer() {
     console.log('resetting from server');
     io.emit('resetBuzzer');
+}
+function startTimer() {
+    // manager.timerObs
+    //     .subscribe((time: number) => {
+    //     })
 }

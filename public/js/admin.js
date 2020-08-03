@@ -1,11 +1,36 @@
 "use strict";
 const adminSocket = io();
-const controls = document.querySelector('#controls');
+const resetBuzzerBtn = document.querySelector('#reset-buzzer');
+const timerStartBtn = document.querySelector('#start-timer');
+const timerPauseBtn = document.querySelector('#pause-timer');
+const timerResetBtn = document.querySelector('#reset-timer');
 const playerList = document.querySelector('#player-list');
 const playerNameBuzzed = document.getElementById('player-name-buzzed');
-controls.addEventListener('submit', (e) => {
+const timerElement = document.getElementById('time');
+// resetBuzzer.addEventListener('submit', (e: Event) => {
+//     e.preventDefault()
+//     adminSocket.emit('resetBuzzer')
+//     playerNameBuzzed.innerHTML = ''
+// })
+resetBuzzerBtn.addEventListener('click', (e) => {
     e.preventDefault();
     adminSocket.emit('resetBuzzer');
+    playerNameBuzzed.innerHTML = '';
+});
+timerStartBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    console.log('time clicked');
+    adminSocket.emit('startTimer');
+    playerNameBuzzed.innerHTML = '';
+});
+timerResetBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    adminSocket.emit('resetTimer');
+    playerNameBuzzed.innerHTML = '';
+});
+timerPauseBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    adminSocket.emit('pauseTimer');
     playerNameBuzzed.innerHTML = '';
 });
 adminSocket.on('connect', () => {
@@ -42,4 +67,7 @@ adminSocket.on('connectedPlayers', (players) => {
         const list = document.querySelector('#player-list');
         list.appendChild(li);
     });
+});
+adminSocket.on('timerUpdate', (time) => {
+    timerElement.innerHTML = time.toString();
 });

@@ -1,14 +1,19 @@
+import { ReplaySubject, Observable } from 'rxjs'
+
 export class GameManager {
     private players: Map<string, string> = new Map()
+    private timer: number = 60
+    private timerInterval: any
+
+    private timerSubject: ReplaySubject<number> = new ReplaySubject()
+    public timerObs: Observable<number> = this.timerSubject.asObservable()
+
     public addPlayer(name: string, id: string): void {
         this.players.set(name, id)
-        console.log('manager', this.players.entries())
     }
 
     public removePlayer(name: string): void {
         this.players.delete(name)
-        console.log('deleted', name)
-        console.log('d', this.players.keys())
     }
 
     public getPlayerNameById(id: string): string {
@@ -29,6 +34,34 @@ export class GameManager {
                 p.push(player)
             })
         return p
+    }
+
+    private updateTimer() {
+        if (this.timer === 0) {
+            clearInterval(this.timerInterval)
+        } else {
+            this.timer -= 1
+            this.timerSubject.next(this.timer)
+        }
+    }
+
+    public startTimer() {
+        this.timerInterval = setInterval(() => {
+            this.updateTimer()
+        }, 1000)
+    }
+
+    public pauseTimer() {
+        if (this.timerInterval) {
+            clearInterval(this.timerInterval)
+        }
+    }
+
+    public resetTimer() {
+        clearInterval(this.timerInterval)
+        this.timer = 60
+        this.timerSubject.next(this.timer)
+        this.timerInterval = undefined
     }
 }
 

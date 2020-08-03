@@ -6,9 +6,18 @@
 <body>
     <h1>Admin</h1>
 
-    <form id="controls">
-        <button id="reset-buzzer">Reset Buzzer</button>
+    <form id="reset-buzzer-form">
+        <button type="button" id="reset-buzzer" value="reset-buzzer">Reset Buzzer</button>
     </form>
+
+    <form id="timer">
+        <p>Timer</p>
+        <button type="button" id="start-timer">Start</button>
+        <button type="button" id="pause-timer">Pause</button>
+        <button type="button" id="reset-timer">Reset</button>
+    </form>
+
+    <p id="time"></p>
 
     <div>
         <h3>Players Connected</h3>

@@ -8,14 +8,19 @@ const buzzerForm: HTMLFormElement = <HTMLFormElement>document.querySelector('#bu
 buzzerForm.style.display = 'none'
 
 const nameForm: HTMLFormElement = <HTMLFormElement>document.querySelector('#name-form')
+
+const timeParagraph: HTMLParagraphElement = <HTMLParagraphElement>document.getElementById('time')
+timeParagraph.style.display = 'none'
+
+
 nameForm.addEventListener('submit', (e) => {
     e.preventDefault()
     const playerNameInput: HTMLInputElement = <HTMLInputElement>document.querySelector('#name-input')
     const playerName: string = playerNameInput.value
-    console.log('player', playerName)
     buzzerSocket.emit('submittedName', playerName)
     nameForm.style.display = 'none'
     buzzerForm.style.display = 'block'
+    timeParagraph.style.display = 'initial'
 })
 
 buzzerForm
@@ -31,4 +36,8 @@ buzzerSocket.on('buzzerPressed', (name: string) => {
 
 buzzerSocket.on('resetBuzzer', () => {
     buzzerButton.removeAttribute('disabled')
+})
+
+buzzerSocket.on('timerUpdate', (time: number) => {
+    timeParagraph.innerHTML = time.toString() + 's'
 })
