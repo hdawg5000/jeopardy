@@ -93,6 +93,7 @@ function buzzed(name) {
     console.log('emitting', name);
     io.emit('buzzerPressed', name);
     io.to(adminSocketId).emit('buzzerPressed', name);
+    manager.pauseTimer();
 }
 function resetBuzzer() {
     console.log('resetting from server');
