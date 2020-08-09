@@ -44,6 +44,7 @@ io.on('connection', (socket) => {
     });
     socket.on('resetBuzzer', () => {
         resetBuzzer();
+        manager.resetTimer();
     });
     socket.on('startTimer', () => {
         console.log('start timer server');
