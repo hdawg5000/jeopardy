@@ -2,5 +2,5 @@ node_modules
 package-lock.json
 
 # Ignores compiled TypeScript files
-**/wwwroot/app/**/*.map
-**/wwwroot/app/**/*.js
+src/**/*.map
+src/**/*.js
