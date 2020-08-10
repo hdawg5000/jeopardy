@@ -71,6 +71,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
         resetBuzzer()
         manager.resetTimer()
     })
+
     socket.on('startTimer', () => {
         console.log('start timer server')
         manager.startTimer()
