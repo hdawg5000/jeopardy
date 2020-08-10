@@ -5,32 +5,43 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="../css/bulma.css">
+    <link rel="stylesheet" type="text/css" href="../css/custom.css">
     <title>Jeopardy | Gameboard</title>
 </head>
 
 <body>
     <section class="section">
-        <div class="container is-full">
+        <div class="container is-fluid">
             {{#each questions}}
-            <div class="columns">
+            <div class="columns is-vcentered">
+                {{#if @first}}
+                {{#each this}}
                 <div class="column has-text-centered card">
-                    <p>{{this.category}}</p>
+                    <p class="category">{{this}}</p>
+                </div>
+                {{/each}}
+                {{else}}
+                {{#each this}}
+                <div class="column has-text-centered card">
+                    <p class="price">{{this}}</p>
+                </div>
+                {{/each}}
+                {{/if}}
+                {{!-- <div class="column has-text-centered card">
+                    <p class="price">{{this.questionOne}}</p>
                 </div>
                 <div class="column has-text-centered card">
-                    <p>{{this.questionOne}}</p>
+                    <p class="price">{{this.questionTwo}}</p>
                 </div>
                 <div class="column has-text-centered card">
-                    <p>{{this.questionTwo}}</p>
+                    <p class="price">{{this.questionThree}}</p>
                 </div>
                 <div class="column has-text-centered card">
-                    <p>{{this.questionThree}}</p>
+                    <p class="price">{{this.questionFour}}</p>
                 </div>
                 <div class="column has-text-centered card">
-                    <p>{{this.questionFour}}</p>
-                </div>
-                <div class="column has-text-centered card">
-                    <p>{{this.questionFive}}</p>
-                </div>
+                    <p class="price">{{this.questionFive}}</p>
+                </div> --}}
             </div>
             {{/each}}
         </div>

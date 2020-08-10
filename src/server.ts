@@ -1,6 +1,5 @@
 import express = require('express')
 import { GameManager } from './gameManager';
-import { QUESTIONS } from './game/gameQuestions';
 const http = require('http')
 const socketio = require('socket.io')
 const path = require('path')
@@ -8,7 +7,6 @@ const handlebars = require('express-handlebars');
 const MongoClient = require('mongodb').MongoClient;
 
 const manager = new GameManager()
-const questions = QUESTIONS
 const app: express.Application = express()
 const server = http.createServer(app)
 // const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
@@ -31,11 +29,16 @@ app.set('view engine', 'hbs')
 app.set('views', path.join(publicDirectoryPath, 'views'))
 app.use(express.static(publicDirectoryPath))
 
+// handlebars.registerHelper('printQuestions', function(value: Object[]) {
+//     const keys = Object.keys(QUESTIONS[0])
+//     return keys.map((key) => QUESTIONS.map((v: any) => v[key]))
+// })
+
 
 const port = process.env.port || 3000
 
 app.get('/', (req, res) => {
-    res.render('main', { questions: questions });
+    res.render('main', { questions: manager.getQuestions() });
     // res.sendFile(publicDirectoryPath + '/index.html')
 })
 

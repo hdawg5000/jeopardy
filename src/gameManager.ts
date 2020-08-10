@@ -1,9 +1,11 @@
 import { ReplaySubject, Observable } from 'rxjs'
+import { QUESTIONS } from './game/gameQuestions'
 
 export class GameManager {
     private players: Map<string, string> = new Map()
     private timer: number = 60
     private timerInterval: any
+    private questions = QUESTIONS
 
     private timerSubject: ReplaySubject<number> = new ReplaySubject()
     public timerObs: Observable<number> = this.timerSubject.asObservable()
@@ -62,6 +64,12 @@ export class GameManager {
         this.timer = 60
         this.timerSubject.next(this.timer)
         this.timerInterval = undefined
+    }
+
+    public getQuestions(): Object[] {
+        const keys = Object.keys(QUESTIONS[0])
+        console.log(keys.map((key) => QUESTIONS.map((v: any) => v[key])))
+        return keys.map((key) => QUESTIONS.map((v: any) => v[key]))
     }
 }
 
