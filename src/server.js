@@ -2,24 +2,36 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const gameManager_1 = require("./gameManager");
+const gameQuestions_1 = require("./game/gameQuestions");
 const http = require('http');
 const socketio = require('socket.io');
 const path = require('path');
+const handlebars = require('express-handlebars');
 const MongoClient = require('mongodb').MongoClient;
 const manager = new gameManager_1.GameManager();
+const questions = gameQuestions_1.QUESTIONS;
 const app = express();
 const server = http.createServer(app);
 // const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
+// app.use(express.static(path.join(publicDirectoryPath, 'views')))
 const io = socketio(server, {
     pingInterval: 10000,
     pingTimeout: 60000,
 });
-const publicDirectoryPath = path.join(__dirname, '../public');
+const publicDirectoryPath = path.join(__dirname, 'public');
+console.log(publicDirectoryPath);
 let adminSocketId = '';
+app.engine('hbs', handlebars({
+    layoutsDir: publicDirectoryPath + '/views',
+    extname: '.hbs'
+}));
+app.set('view engine', 'hbs');
+app.set('views', path.join(publicDirectoryPath, 'views'));
+app.use(express.static(publicDirectoryPath));
 const port = process.env.port || 3000;
-app.use(express.static('public'));
 app.get('/', (req, res) => {
-    res.sendFile(publicDirectoryPath + '/index.html');
+    res.render('main', { questions: questions });
+    // res.sendFile(publicDirectoryPath + '/index.html')
 });
 app.get('/buzzer', (req, res) => {
     res.sendFile(publicDirectoryPath + '/buzzer.html');
